@@ -57,6 +57,39 @@ async def roll_dice(ctx, dice: str):
         await ctx.send("Haha, no. Try again in a different format maybe? *or check `>help roll`*")
 
 
+@bot.command(name='abilityroll', help='Rolls ability rolls for you', usage='Rolls 4d6 and keeps highest 3'
+                                                                           'for each ability')
+async def roll_ability(ctx):
+    detail_prompt = ''
+    response = list()
+
+    for _ in range(6):
+        sum = 0
+        results = list()
+        temp = list()
+        details = list()
+
+        for _ in range(4):
+            res = random.randint(1, 6)
+            results.append(res)
+            temp.append(str(res))
+        results.sort()
+        cnt = 0
+        for s in temp:
+            if int(s) == results[0] and not cnt:
+                details.append(f'{s}')
+                cnt += 1
+            else:
+                details.append(f'**{s}**')
+        for i in results[1:]:
+            sum += i
+        response.append(sum)
+        detail_prompt += f"({', '.join(details)})"
+
+    response = [str(i) for i in sorted(response, reverse=True)]
+    await ctx.send(f"{detail_prompt}\n\nResults: {', '.join(response)}")
+
+
 @bot.command(name='twss', help='That\'s what she said!')
 async def twss(ctx):
     await ctx.send(file=discord.File(open(f"images/twss/{random.choice(os.listdir('images/twss/'))}", 'rb')))
