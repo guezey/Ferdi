@@ -41,7 +41,7 @@ async def roll_dice(ctx, dice: str):
                         sub_result.append(str(res))
                 result.append(f"({', '.join(sub_result)})")
 
-            elif set.find('d') == 0:  # if set is only one set
+            elif set.find('d') == 0:  # if set is only one die
                 res = random.randint(1, int(set[1:]))
                 sum += res
                 result.append(f"({res})")
