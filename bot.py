@@ -33,7 +33,7 @@ async def roll_dice(ctx, dice: str):
 
 @bot.command(name='twss', help='- That\'s what she said!')
 async def twss(ctx):
-    await ctx.send(file=discord.File(open('visuals/the-office-thats-what-she-said.gif', 'rb')))
+    await ctx.send(file=discord.File(open('the-office-thats-what-she-said.gif', 'rb')))
 
 
 bot.run(TOKEN)
