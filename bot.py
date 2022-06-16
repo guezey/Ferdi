@@ -56,7 +56,9 @@ async def roll_dice(ctx, dice: str):
 
 @bot.command(name='twss', help='That\'s what she said!')
 async def twss(ctx):
-    await ctx.send(file=discord.File(open('the-office-thats-what-she-said.gif', 'rb')))
+    image = random.choice(os.listdir('images/twss/'))
+    file = discord.File(open(f'images/twss/{image}', 'rb'))
+    await ctx.send(file=file)
 
 
 bot.run(TOKEN)
