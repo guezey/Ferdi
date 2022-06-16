@@ -26,39 +26,40 @@ async def roll_dice(ctx, dice: str):
     try:
         result = list()
         sum = 0
-        cmd = dice.split('+')
-        for die in cmd:
-            if die.find('d') > 0:
+
+        for set in dice.split('+'):  # for each die set
+            if set.find('d') > 0:  # if set includes multiple dice
                 sub_result = list()
-                for _ in range(int(die.split('d')[0])):
-                    res = random.randint(1, int(die.split('d')[1]))
+                for _ in range(int(set.split('d')[0])):
+                    res = random.randint(1, int(set.split('d')[1]))
                     sum += res
-                    if res == int(die.split('d')[1]):
+                    if res == int(set.split('d')[1]):
                         sub_result.append(f"***{res}***")
                     elif res == 1:
                         sub_result.append(f"__{res}__")
                     else:
                         sub_result.append(str(res))
                 result.append(f"({', '.join(sub_result)})")
-            elif die.find('d') == 0:
-                res = random.randint(1, int(die[1:]))
+
+            elif set.find('d') == 0:  # if set is only one die
+                res = random.randint(1, int(set[1:]))
                 sum += res
                 result.append(f"({res})")
-            else:
-                result.append(f'+ ({die})')
-                sum += int(die)
+
+            else:  # if set is a constant modifier
+                result.append(f'+ ({set})')
+                sum += int(set)
+
         result.append(f'Total: {sum}')
         await ctx.send(' | '.join(result))
+
     except ValueError:
         await ctx.send("Haha, no. Try again in a different format maybe? *or check `>help roll`*")
-        raise
 
 
 @bot.command(name='twss', help='That\'s what she said!')
 async def twss(ctx):
-    image = random.choice(os.listdir('images/twss/'))
-    file = discord.File(open(f'images/twss/{image}', 'rb'))
-    await ctx.send(file=file)
+    await ctx.send(file=discord.File(open(f"images/twss/{random.choice(os.listdir('images/twss/'))}", 'rb')))
 
 
 bot.run(TOKEN)
