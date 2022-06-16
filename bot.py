@@ -7,7 +7,11 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='>')
+help_command = commands.DefaultHelpCommand(
+    no_category='General commands'
+)
+
+bot = commands.Bot(command_prefix='>', help_command=help_command)
 
 
 @bot.event
@@ -57,8 +61,8 @@ async def roll_dice(ctx, dice: str):
         await ctx.send("Haha, no. Try again in a different format maybe? *or check `>help roll`*")
 
 
-@bot.command(name='abilityroll', help='Rolls ability rolls for you', usage='Rolls 4d6 and keeps highest 3'
-                                                                           'for each ability')
+@bot.command(name='abilityroll', help='Rolls ability rolls for new D&D characters',
+             usage='\n\nRolls 6 sets of 4d6 and keeps highest 3 for each set')
 async def roll_ability(ctx):
     detail_prompt = ''
     response = list()
@@ -88,6 +92,30 @@ async def roll_ability(ctx):
 
     response = [str(i) for i in sorted(response, reverse=True)]
     await ctx.send(f"{detail_prompt}\n\nResults: {', '.join(response)}")
+
+
+@bot.command(name='fateroll', help='Rolls Fate RPG dice', usage="\n\nJust specify the modifier, like '>fateroll 2', "
+                                                                "or ignore it if there is no modifier, "
+                                                                "we'll make sure the rest is working ;)")
+async def roll_fate(ctx, mod: int = 0):
+    dice = [random.randint(-1, 1) for _ in range(4)]
+    response = list()
+
+    sum = 0
+    for die in dice:
+        if die == 1:
+            response.append('(+)')
+        elif die == -1:
+            response.append('(-)')
+        else:
+            response.append('(  )')
+        sum += die
+
+    sum += mod
+    response.append(f'| Mod: {mod}')
+    response.append(f'\nResult: {sum}')
+
+    await ctx.send(' '.join(response))
 
 
 @bot.command(name='twss', help='That\'s what she said!')
