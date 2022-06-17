@@ -54,7 +54,7 @@ class Rolls(commands.Cog):
             await ctx.send("Haha, no. Try again in a different format maybe? *or check `>help roll`*")
 
     @commands.command(name='rollability', help='Rolls ability rolls for new D&D characters',
-                      usage='\n\nRolls 6 sets of 4d6 and keeps highest 3 for each set', alias='ra')
+                      usage='\n\nRolls 6 sets of 4d6 and keeps highest 3 for each set')
     async def roll_ability(self, ctx):
         detail_prompt = ''
         response = list()
@@ -88,7 +88,7 @@ class Rolls(commands.Cog):
     @commands.command(name='rollfate', help='Rolls Fate RPG dice',
                       usage="\n\nJust specify the modifier, like '>fateroll 2', "
                             "or ignore it if there is no modifier, "
-                            "we'll make sure the rest is working ;)", alias='rf')
+                            "we'll make sure the rest is working ;)")
     async def roll_fate(self, ctx, mod: int = 0):
         dice = [random.randint(-1, 1) for _ in range(4)]
         response = list()
