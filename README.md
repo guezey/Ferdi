@@ -3,7 +3,7 @@
 ### A tiny, lovely, sweet Discord bot.
 
 It runs on Python, accepts '&gt;' as command prefix,
-and currently has three commands:
+and responses to the following commands (for now):
 
 - &gt;roll: Rolls any combination of dice.
 
@@ -20,6 +20,17 @@ and currently has three commands:
         Example: >roll 2d8+d6+3d20+5+-4
         Output:  (2, 1) | (2) | (14, 14, 10) | + (5) | + (-4) | Total: 44
 
-- &gt;abilityroll: Rolls 6 * (4d6kh3), used to create D&D characters.
+- &gt;rollability: Rolls 6 sets of 4d6 and keeps highest 3 for each set.
+        Used when creating D&D characters.
+
+- &gt;rollfate: Rolls Fate RPG dice.
+        
+        Example: >rollfate 2
+        Output:  (  ) (  ) (+) (+) | Mod: 2 
+                 Result: 4
+
+        Example: >rollfate
+        Output:  (+) (-) (+) (  ) | Mod: 0 
+                 Result: 1
 
 - &gt;twss: Sends a random "That's what she said" GIF from The Office.
