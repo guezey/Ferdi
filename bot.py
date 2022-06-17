@@ -1,14 +1,14 @@
 import os
 import random
-import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-
-help_command = commands.DefaultHelpCommand(no_category='General commands')
-bot = commands.Bot(command_prefix='>', help_command=help_command)
+bot = commands.Bot(
+    command_prefix='>',
+    help_command=commands.DefaultHelpCommand(no_category='General commands')
+)
 
 
 class Rolls(commands.Cog):
@@ -85,10 +85,10 @@ class Rolls(commands.Cog):
         response = [str(i) for i in sorted(response, reverse=True)]
         await ctx.send(f"{detail_prompt}\nResults: {', '.join(response)}")
 
-    @commands.command(name='rollfate', help='Rolls Fate RPG dice',
-                      usage="\n\nJust specify the modifier, like '>fateroll 2', "
-                            "or ignore it if there is no modifier, "
-                            "we'll make sure the rest is working ;)")
+    @commands.command(name='rollfate', help='Rolls Fate RPG dice', usage="\n\nJust specify the modifier, like "
+                                                                         "'>fateroll 2', "
+                                                                         "or ignore it if there is no modifier, "
+                                                                         "we'll make sure the rest is working ;)")
     async def roll_fate(self, ctx, mod: int = 0):
         dice = [random.randint(-1, 1) for _ in range(4)]
         response = list()
@@ -110,11 +110,6 @@ class Rolls(commands.Cog):
         await ctx.send(' '.join(response))
 
 
-@bot.event
-async def on_ready():
-    print(f'{bot.user} has connected.')
-
-
 @bot.command(name='twss', help='That\'s what she said!', hidden=True)
 async def twss(ctx):
     """
@@ -131,6 +126,16 @@ async def twss(ctx):
             msg.append(line)
 
     await ctx.send(random.choice(msg))
+
+
+@bot.command(name='source', help='Me, basically.', hidden=True)
+async def source(ctx):
+    await ctx.send('https://github.com/guezey/Ferdi. You\'re welcome.')
+
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} has connected.')
 
 
 bot.add_cog(Rolls())
