@@ -23,7 +23,6 @@ and responds to the following commands (for now):
 
 - &gt;rollability: Rolls 6 sets of 4d6 and keeps highest 3 for each set.
         Used when creating D&D characters.
-        
   ```
   Output: (1, 4, 4, 2)
           (5, 3, 4, 1)
@@ -33,7 +32,8 @@ and responds to the following commands (for now):
           (6, 1, 3, 6)
   
           Results: 16, 15, 12, 12, 10, 7
-
+  ```
+  
 - &gt;rollfate: Rolls Fate RPG dice.
   ```
   Example: >rollfate 2
