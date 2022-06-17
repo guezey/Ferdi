@@ -115,9 +115,14 @@ async def on_ready():
     print(f'{bot.user} has connected.')
 
 
-@bot.command(name='twss', help='That\'s what she said!')
+@bot.command(name='twss', help='That\'s what she said!', hidden=True)
 async def twss(ctx):
-    await ctx.send(file=discord.File(open(f"images/twss/{random.choice(os.listdir('images/twss/'))}", 'rb')))
+    msg = list()
+    with open('images/twss/links.txt', 'rt') as links:
+        for line in links:
+            msg.append(line)
+
+    await ctx.send(random.choice(msg))
 
 
 bot.add_cog(Rolls())
