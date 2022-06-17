@@ -3,7 +3,7 @@
 ### A tiny, lovely, sweet Discord bot.
 
 It runs on Python, accepts '&gt;' as command prefix,
-and responses to the following commands (for now):
+and responds to the following commands (for now):
 
 - &gt;roll: Rolls any combination of dice.
 
