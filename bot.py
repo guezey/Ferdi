@@ -117,6 +117,14 @@ async def on_ready():
 
 @bot.command(name='twss', help='That\'s what she said!', hidden=True)
 async def twss(ctx):
+    """
+        Sends a link to GIPHY.com to the chat. Discord automatically
+        shows the GIF inside the link in the chat.
+
+        It uses links to the GIFs instead of the actual .gif file
+        to decrease response time.
+    """
+
     msg = list()
     with open('images/twss/links.txt', 'rt') as links:
         for line in links:
