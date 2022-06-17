@@ -20,7 +20,6 @@ and responds to the following commands (for now):
   Example: >roll 2d8+d6+3d20+5+-4
   Output:  (2, 1) | (2) | (14, 14, 10) | + (5) | + (-4) | Total: 44
   ```
-
 - &gt;rollability: Rolls 6 sets of 4d6 and keeps highest 3 for each set.
         Used when creating D&D characters.
   ```
@@ -33,7 +32,6 @@ and responds to the following commands (for now):
   
           Results: 16, 15, 12, 12, 10, 7
   ```
-  
 - &gt;rollfate: Rolls Fate RPG dice.
   ```
   Example: >rollfate 2
@@ -46,5 +44,5 @@ and responds to the following commands (for now):
   Output:  (+) (-) (+) (  ) | Mod: 0 
            Result: 1
   ```
-
 - &gt;twss: Sends a random "That's what she said" GIF from The Office.
+- &gt;source: Sends the link to here.
