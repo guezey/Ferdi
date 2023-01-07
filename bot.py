@@ -1,25 +1,62 @@
 import discord
 import os
 import random
+import asyncio
+import youtube_dl
 from discord.ext import commands
+from dotenv import load_dotenv
 
+load_dotenv()
 TOKEN = os.environ['DISCORD_TOKEN']
 intents = discord.Intents().default()
-intents.message_content=True
+intents.message_content = True
 bot = commands.Bot(
     intents=intents,
     command_prefix='>',
-    help_command=commands.DefaultHelpCommand(no_category='General commands')
+    help_command=commands.DefaultHelpCommand(no_category='\nOther')
 )
+
+yt_dl_opts = {
+    'format': 'bestaudio/best',
+    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'restrictfilenames': True,
+    'noplaylist': True,
+    'nocheckcertificate': True,
+    'ignoreerrors': False,
+    'logtostderr': False,
+    'quiet': True,
+    'no_warnings': True,
+    'default_search': 'auto',
+    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+}
+ytdl = youtube_dl.YoutubeDL(yt_dl_opts)
+
+ffmpeg_options = {'options': "-vn"}
+
+voice_clients = {}
+
+
+@bot.command(name='play')
+async def play_url(ctx, url: str):
+
+    voice_client = await ctx.message.author.voice.channel.connect()
+
+    loop = asyncio.get_event_loop()
+    data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+
+    song = data['url']
+    player = discord.FFmpegOpusAudio(song, **ffmpeg_options, executable="C:\\ffmpeg\\ffmpeg.exe")
+
+    voice_client.play(player)
 
 
 @bot.command(name='roll', help='Rolls some dice', description="\n\nUse format: 'd6+2d4+10'"
-                                                             "\nYou can use negative modifiers as: 'd20+-12'"
-                                                             "\nPut that damn plus between everything. Please."
-                                                             "\nNo parentheses. Why would you use them anyway?"
-                                                             "\n\nDo *NOT* put spaces in your expression."
-                                                             "\nEverything *MUST* be next to each other."
-                                                             "\nOtherwise rolls only the first one")
+                                                              "\nYou can use negative modifiers as: 'd20+-12'"
+                                                              "\nPut that damn plus between everything. Please."
+                                                              "\nNo parentheses. Why would you use them anyway?"
+                                                              "\n\nDo *NOT* put spaces in your expression."
+                                                              "\nEverything *MUST* be next to each other."
+                                                              "\nOtherwise rolls only the first one")
 async def roll_dice(ctx, dice: str):
     try:
         result = list()
@@ -54,8 +91,9 @@ async def roll_dice(ctx, dice: str):
     except ValueError:
         await ctx.send("Haha, no. Try again in a different format maybe? *or check `>help roll`*")
 
+
 @bot.command(name='rollability', help='Rolls ability rolls for new D&D characters',
-                  description='\n\nRolls 6 sets of 4d6 and keeps highest 3 for each set')
+             description='\n\nRolls 6 sets of 4d6 and keeps highest 3 for each set')
 async def roll_ability(ctx):
     detail_prompt = ''
     response = list()
@@ -86,10 +124,11 @@ async def roll_ability(ctx):
     response = [str(i) for i in sorted(response, reverse=True)]
     await ctx.send(f"{detail_prompt}\nResults: {', '.join(response)}")
 
+
 @bot.command(name='rollfate', help='Rolls Fate RPG dice', description="\n\nJust specify the modifier, like "
-                                                                     "'>fateroll 2', "
-                                                                     "or ignore it if there is no modifier, "
-                                                                     "we'll make sure the rest is working ;)")
+                                                                      "'>fateroll 2', "
+                                                                      "or ignore it if there is no modifier, "
+                                                                      "we'll make sure the rest is working ;)")
 async def roll_fate(ctx, mod: int = 0):
     dice = [random.randint(-1, 1) for _ in range(4)]
     response = list()
@@ -118,7 +157,8 @@ async def twss(ctx):
         shows the GIF inside the link in the chat.
 
         It uses links to the GIFs instead of the actual .gif file
-        to decrease response time.
+        to decrease response time (It did use the files for some time
+        actually, and it was sooo slow. So let's use the links instead).
     """
 
     msg = list()
