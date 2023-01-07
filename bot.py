@@ -27,7 +27,7 @@ yt_dl_opts = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+    'source_address': '0.0.0.0'  # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
 ytdl = youtube_dl.YoutubeDL(yt_dl_opts)
 
@@ -38,8 +38,11 @@ voice_clients = {}
 
 @bot.command(name='play')
 async def play_url(ctx, url: str):
-
-    voice_client = await ctx.message.author.voice.channel.connect()
+    try:
+        voice_client = await ctx.message.author.voice.channel.connect()
+        voice_clients[ctx.guild.id] = voice_client
+    except discord.ClientException:
+        voice_client = voice_clients[ctx.guild.id]
 
     loop = asyncio.get_event_loop()
     data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
@@ -48,6 +51,16 @@ async def play_url(ctx, url: str):
     player = discord.FFmpegOpusAudio(song, **ffmpeg_options, executable="C:\\ffmpeg\\ffmpeg.exe")
 
     voice_client.play(player)
+
+
+@bot.command(name='pause')
+async def pause(ctx):
+    voice_clients[ctx.guild.id].pause()
+
+
+@bot.command(name='resume')
+async def resume(ctx):
+    voice_clients[ctx.guild.id].resume()
 
 
 @bot.command(name='roll', help='Rolls some dice', description="\n\nUse format: 'd6+2d4+10'"
